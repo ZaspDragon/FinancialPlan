@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Financial Plan Advisor</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Mobile financial advisor dashboard</p>
+        <h1>Financial Plan Advisor</h1>
+        <p class="subtext">See what money you really have, where it should go, and how to split everything cleanly.</p>
+      </div>
+      <div class="hero-actions">
+        <button id="loadSampleBtn" class="secondary">Load Your Current Example</button>
+        <button id="resetBtn" class="ghost">Reset</button>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="card form-card">
+        <div class="card-header">
+          <h2>Monthly Setup</h2>
+          <p>Enter take-home income and bills.</p>
+        </div>
+
+        <div class="form-grid two-col">
+          <label>
+            <span>Brandon income</span>
+            <input type="number" id="incomeA" min="0" step="0.01" placeholder="2850" />
+          </label>
+          <label>
+            <span>Alexandria income</span>
+            <input type="number" id="incomeB" min="0" step="0.01" placeholder="2850" />
+          </label>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="section-title-row">
+          <h3>Shared bills</h3>
+          <button id="addSharedBillBtn" class="mini">+ Add bill</button>
+        </div>
+        <div id="sharedBills"></div>
+
+        <div class="line"></div>
+
+        <div class="section-title-row">
+          <h3>Brandon personal bills</h3>
+          <button id="addPersonalABillBtn" class="mini">+ Add bill</button>
+        </div>
+        <div id="personalBillsA"></div>
+
+        <div class="line"></div>
+
+        <div class="section-title-row">
+          <h3>Alexandria personal bills</h3>
+          <button id="addPersonalBBillBtn" class="mini">+ Add bill</button>
+        </div>
+        <div id="personalBillsB"></div>
+
+        <div class="line"></div>
+
+        <div class="section-title-row">
+          <h3>Goals</h3>
+        </div>
+        <div class="form-grid two-col">
+          <label>
+            <span>Emergency fund goal</span>
+            <input type="number" id="emergencyGoal" min="0" step="0.01" placeholder="10000" />
+          </label>
+          <label>
+            <span>Current emergency fund</span>
+            <input type="number" id="currentEmergency" min="0" step="0.01" placeholder="0" />
+          </label>
+          <label>
+            <span>House fund goal</span>
+            <input type="number" id="houseGoal" min="0" step="0.01" placeholder="20000" />
+          </label>
+          <label>
+            <span>Current house fund</span>
+            <input type="number" id="currentHouse" min="0" step="0.01" placeholder="0" />
+          </label>
+        </div>
+
+        <div class="advisor-toggles">
+          <label class="toggle">
+            <input type="checkbox" id="splitEvenly" checked />
+            <span>Split shared bills 50/50</span>
+          </label>
+          <label class="toggle">
+            <input type="checkbox" id="aggressiveSavings" />
+            <span>Aggressive wealth mode</span>
+          </label>
+        </div>
+      </section>
+
+      <section class="card dashboard-card">
+        <div class="card-header">
+          <h2>Your Money Snapshot</h2>
+          <p>What you actually have after bills and smart allocations.</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat">
+            <span>Total income</span>
+            <strong id="totalIncome">$0</strong>
+          </div>
+          <div class="stat">
+            <span>Total bills</span>
+            <strong id="totalBills">$0</strong>
+          </div>
+          <div class="stat highlight">
+            <span>Free cash this month</span>
+            <strong id="freeCash">$0</strong>
+          </div>
+          <div class="stat">
+            <span>Recommended savings</span>
+            <strong id="recommendedSavings">$0</strong>
+          </div>
+        </div>
+
+        <div class="chart-block">
+          <div class="bar-row">
+            <span>Income</span>
+            <div class="bar-track"><div id="incomeBar" class="bar income-bar"></div></div>
+            <strong id="incomeBarValue">$0</strong>
+          </div>
+          <div class="bar-row">
+            <span>Bills</span>
+            <div class="bar-track"><div id="billsBar" class="bar bills-bar"></div></div>
+            <strong id="billsBarValue">$0</strong>
+          </div>
+          <div class="bar-row">
+            <span>Saved / goals</span>
+            <div class="bar-track"><div id="savingsBar" class="bar savings-bar"></div></div>
+            <strong id="savingsBarValue">$0</strong>
+          </div>
+          <div class="bar-row">
+            <span>Left to enjoy / extra debt</span>
+            <div class="bar-track"><div id="spendBar" class="bar spend-bar"></div></div>
+            <strong id="spendBarValue">$0</strong>
+          </div>
+        </div>
+
+        <div class="advice-panel">
+          <h3>Advisor</h3>
+          <div id="advisorText"></div>
+        </div>
+      </section>
+
+      <section class="card split-card">
+        <div class="card-header">
+          <h2>Who Pays What</h2>
+          <p>Clean split for an unmarried setup.</p>
+        </div>
+        <div class="split-grid">
+          <div>
+            <h3>Brandon</h3>
+            <ul id="breakdownA" class="breakdown"></ul>
+          </div>
+          <div>
+            <h3>Alexandria</h3>
+            <ul id="breakdownB" class="breakdown"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="card plan-card">
+        <div class="card-header">
+          <h2>Recommended Monthly Plan</h2>
+          <p>Auto-generated from your numbers.</p>
+        </div>
+        <div id="planRows" class="plan-rows"></div>
+      </section>
+
+      <section class="card actions-card">
+        <div class="card-header">
+          <h2>Account Structure</h2>
+          <p>Simple and clean while not married yet.</p>
+        </div>
+        <div class="account-list">
+          <div class="account-item"><strong>Brandon checking</strong><span>Main income and personal spending</span></div>
+          <div class="account-item"><strong>Alexandria checking</strong><span>Main income and personal spending</span></div>
+          <div class="account-item"><strong>Joint bills account</strong><span>Rent, electric, internet, other shared bills</span></div>
+          <div class="account-item"><strong>Joint savings</strong><span>Emergency fund and house fund</span></div>
+          <div class="account-item"><strong>Two Roth IRAs</strong><span>One for each person, retirement stays separate</span></div>
+        </div>
+        <div class="footer-actions">
+          <button id="exportBtn">Export Data</button>
+          <label class="file-label">
+            Import Data
+            <input type="file" id="importFile" accept="application/json" />
+          </label>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <template id="billRowTemplate">
+    <div class="bill-row">
+      <input type="text" class="bill-name" placeholder="Bill name" />
+      <input type="number" class="bill-amount" min="0" step="0.01" placeholder="0" />
+      <button class="delete-row" title="Remove">×</button>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
